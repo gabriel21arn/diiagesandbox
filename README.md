@@ -14,19 +14,19 @@ For the moment the application runs alone, it does not call any API, or any othe
 
 #### Class diagram
 
-+------------------------+
-|       Character        |
-+------------------------+
-|  id: Int              |
-|  firstName: String    |
-|  lastName: String     |
-|  age: Int             |
-+------------------------+
+| Character            |
+|----------------------|
+| - id: Int            |
+| - firstName: String  |
+| - lastName: String   |
+| - age: Int           |
+| - presence: List<Episode> |
 
-+------------------------+
-|       Episode          |
-+------------------------+
-|  id: Int              |
-|  date: String         |
-|  name: String         |
-+------------------------+
+
+| Episode          |
+|------------------|
+| - id: Int        |
+| - date: String   |
+| - name: String   |
+
+**Character** has a list of **Episode** (`presence`).

@@ -1,5 +1,8 @@
 package org.mathieu.sandbox.ui.screens.characters
 
+import android.content.Context
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -93,17 +97,24 @@ private fun CharacterCard(
     episodes: List<Episode>,
     onClick: () -> Unit,
     onEpisodeClick: (Int) -> Unit
-) = Card(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(4.dp)
-        .clickable(onClick = onClick)
 ) {
-    Column(modifier = Modifier.padding(8.dp)) {
-        Text(text = name)
-        Text(text = surname)
-        episodes.forEach { episode ->
-            EpisodeCard(title = episode.name, onClick = { onEpisodeClick(episode.id) })
+    val context = LocalContext.current
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .clickable{
+                vibratePhone(context)
+                onClick()
+            }
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(text = name)
+            Text(text = surname)
+            episodes.forEach { episode ->
+                EpisodeCard(title = episode.name, onClick = { onEpisodeClick(episode.id) })
+            }
         }
     }
 }
@@ -127,6 +138,13 @@ private fun EpisodeCard(
     }
 }
 
+
+
+private fun vibratePhone(context: Context) {
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    val vibrationEffect = VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+    vibrator.vibrate(vibrationEffect)
+}
 
 @Preview
 @Composable

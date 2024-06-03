@@ -19,6 +19,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import org.mathieu.sandbox.domain.models.Episode
+import org.mathieu.sandbox.ui.screens.episodedetails.EpisodeDetailsScreen
 
 @Composable
 fun CharactersScreen(
@@ -65,6 +67,7 @@ private fun Content(
             CharacterCard(
                 name = character.firstName,
                 surname = character.lastName,
+                episodes = character.presence,
                 onClick = { clickedOnCard(character.id) }
             )
         }
@@ -77,6 +80,7 @@ private fun Content(
 private fun CharacterCard(
     name: String,
     surname: String,
+    episodes: List<Episode>,
     onClick: () -> Unit
 ) = Card(
     modifier = Modifier
@@ -86,6 +90,10 @@ private fun CharacterCard(
 ) {
     Text(text = name)
     Text(text = surname)
+    Text(text = "participation :")
+    for (episode in episodes) {
+        EpisodeDetailsScreen(episodeId = episode.id)
+    }
 }
 
 

@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import org.mathieu.sandbox.ui.screens.episodedetails.CardEpisodeDetailsScreen
 
 
 @Composable
@@ -45,6 +46,10 @@ private fun Content(
     ) {
         Text(text = state.firstName)
         Text(text = state.lastName)
+        Text(text = "Participations : ")
+        state.episodes.forEach { episode ->
+            CardEpisodeDetailsScreen(episodeId = episode.id)
+        }
     }
 
 }

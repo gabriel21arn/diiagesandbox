@@ -21,6 +21,7 @@ import androidx.navigation.navArgument
 import org.mathieu.sandbox.ui.core.theme.SandboxTheme
 import org.mathieu.sandbox.ui.screens.characterdetails.CharacterDetailsScreen
 import org.mathieu.sandbox.ui.screens.characters.CharactersScreen
+import org.mathieu.sandbox.ui.screens.episodedetails.CardEpisodeDetailsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +69,19 @@ class MainActivity : ComponentActivity() {
 
                         }
 
+                        composable(
+                            route = "episodes/{id}",
+                            arguments = listOf(navArgument("id") { type = NavType.IntType })
+                        ) { navBackStackEntry ->
+                            val id: Int? = navBackStackEntry.arguments?.getInt("id")
+
+
+                            if (id != null) {
+                                CardEpisodeDetailsScreen(
+                                    episodeId = id
+                                )
+                            }
+                        }
                     }
                 }
             }

@@ -21,7 +21,6 @@ import androidx.navigation.NavController
  */
 @Composable
 fun CardEpisodeDetailsScreen(
-    navController: NavController,
     episodeId: Int
 ) {
     val viewModel: EpisodeDetailsViewModel = viewModel()
@@ -37,7 +36,7 @@ fun CardEpisodeDetailsScreen(
                 .padding(4.dp)
         ) {
             EpisodeDetailsScreen(
-                state = state
+                episodeId = episodeId
             )
         }
     }
@@ -47,19 +46,25 @@ fun CardEpisodeDetailsScreen(
  * A text with the different information of the episode
  */
 @Composable
-private fun EpisodeDetailsScreen(
-    state: EpisodeDetailsState
-) =
+fun EpisodeDetailsScreen(
+    episodeId: Int
+) {
+    val viewModel: EpisodeDetailsViewModel = viewModel()
+    val state: EpisodeDetailsState by viewModel.state.collectAsState()
+    LaunchedEffect(key1 = 0) {
+        viewModel.initialize(id = episodeId)
+    }
     Column {
         Text(text = state.name)
-        Text(text = state.date)     }
+        Text(text = state.date)
+    }
+}
 
 
 @Preview
 @Composable
 private fun Preview() {
     EpisodeDetailsScreen(
-        state = EpisodeDetailsState(name = "Friends: The One Where Ross Finds Out",
-                                    date = "novembre 9, 1995")
+        episodeId = 1
     )
 }

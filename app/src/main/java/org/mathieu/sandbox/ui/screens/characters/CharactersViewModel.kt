@@ -22,6 +22,7 @@ data class CharactersState(
 
 sealed interface CharactersEvent {
     data class NavigateToDetails(val id: Int) : CharactersEvent
+    data class NavigateToEpisodeDetails(val id: Int) : CharactersEvent
 }
 
 class CharactersViewModel(application: Application) : AndroidViewModel(application = application) {
@@ -54,6 +55,11 @@ class CharactersViewModel(application: Application) : AndroidViewModel(applicati
     fun navigateToDetail(id: Int) {
         viewModelScope.launch {
             _events.send(CharactersEvent.NavigateToDetails(id = id))
+        }
+    }
+    fun navigateToEpisodeDetail(id: Int) {
+        viewModelScope.launch {
+            _events.send(CharactersEvent.NavigateToEpisodeDetails(id))
         }
     }
 

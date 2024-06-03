@@ -19,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import org.mathieu.sandbox.domain.models.Episode
 
 @Composable
 fun CharactersScreen(
@@ -36,7 +37,9 @@ fun CharactersScreen(
                     is CharactersEvent.NavigateToDetails -> navController.navigate(
                         route = "characters/${event.id}"
                     )
-
+                    is CharactersEvent.NavigateToEpisodeDetails -> navController.navigate(
+                        route = "episode/${event.id}"
+                    )
                     null -> { }
                 }
 
@@ -47,7 +50,11 @@ fun CharactersScreen(
         state = state,
         clickedOnCard = {
             viewModel.navigateToDetail(it)
+        },
+        clickedOnEpisode = {
+            viewModel.navigateToEpisodeDetail(it)
         }
+
     )
 }
 
@@ -55,9 +62,9 @@ fun CharactersScreen(
 @Composable
 private fun Content(
     state: CharactersState,
-    clickedOnCard: (Int) -> Unit = { }
+    clickedOnCard: (Int) -> Unit = { },
+    clickedOnEpisode: (Int) -> Unit = { }
 ) = Column {
-
     state.error?.let { error ->
         Text(text = error)
     } ?: LazyColumn {
@@ -65,27 +72,59 @@ private fun Content(
             CharacterCard(
                 name = character.firstName,
                 surname = character.lastName,
-                onClick = { clickedOnCard(character.id) }
+                episodes = character.presence,
+                onClick = { clickedOnCard(character.id) },
+                onEpisodeClick = { clickedOnEpisode(it) }
             )
         }
     }
-
 }
 
 
+/**
+ * A character's card with their name,
+ * surname and a list of episodes they appear in.
+ * Each episode is clickable and navigates to the episode's details when clicked.
+ */
 @Composable
 private fun CharacterCard(
     name: String,
     surname: String,
-    onClick: () -> Unit
+    episodes: List<Episode>,
+    onClick: () -> Unit,
+    onEpisodeClick: (Int) -> Unit
 ) = Card(
     modifier = Modifier
         .fillMaxWidth()
         .padding(4.dp)
         .clickable(onClick = onClick)
 ) {
-    Text(text = name)
-    Text(text = surname)
+    Column(modifier = Modifier.padding(8.dp)) {
+        Text(text = name)
+        Text(text = surname)
+        episodes.forEach { episode ->
+            EpisodeCard(title = episode.name, onClick = { onEpisodeClick(episode.id) })
+        }
+    }
+}
+
+/**
+ * An episode's card with its title.
+ * The card is clickable and triggers the provided onClick callback.
+ */
+@Composable
+private fun EpisodeCard(
+    title: String,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp)
+            .clickable(onClick = onClick)
+    ) {
+        Text(text = title, modifier = Modifier.padding(8.dp))
+    }
 }
 
 

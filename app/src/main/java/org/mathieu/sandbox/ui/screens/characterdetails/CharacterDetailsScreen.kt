@@ -23,11 +23,7 @@ fun CharacterDetailsScreen(
 ) {
     val viewModel: CharacterDetailsViewModel = viewModel()
     val state: CharacterDetailsState by viewModel.state.collectAsState()
-
-    LaunchedEffect(key1 = 0) {
-        viewModel.initialize(id = characterId)
-    }
-
+    viewModel.initialize(id = characterId)
     Content(
         state = state
     )
